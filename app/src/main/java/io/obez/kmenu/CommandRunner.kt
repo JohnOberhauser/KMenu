@@ -13,14 +13,13 @@ import java.io.InputStreamReader
 object CommandRunner {
     fun run(command: String): StateFlow<String> {
         val process = ProcessBuilder("bash", "-c", command).start()
-//        val process: Process = Runtime.getRuntime().exec(arrayOf("bash", "-c", command))
 
         val stdInput = BufferedReader(InputStreamReader(process.inputStream))
         val stdError = BufferedReader(InputStreamReader(process.errorStream))
 
         val flow = MutableStateFlow("")
 
-        var output: String? = null
+        var output: String?
         GlobalScope.launch(context = Dispatchers.IO, block = {
             output = stdInput.readLine()
             while(output != null) {
