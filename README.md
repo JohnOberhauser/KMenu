@@ -26,7 +26,7 @@ Check out `system/Commands` for your system commands
 
 ### Recommended sway configs
 
-Add this to your sway configs for the best experience
+If you are using sway, add this to your sway configs for the best experience
 
 
     for_window [title="KMenu - power options"] floating enable
