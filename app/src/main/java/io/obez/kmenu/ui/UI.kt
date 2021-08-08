@@ -31,96 +31,29 @@ fun Root() {
                     .fillMaxSize()
                     .wrapContentSize(Alignment.Center)
             ) {
-                Lock()
-                Sleep()
-                Logout()
-                Restart()
-                Shutdown()
+                Icon(onClick = { Commands.lock() }, iconPath = "lock.svg")
+                Icon(onClick = { Commands.sleep() }, iconPath = "pause.svg")
+                Icon(onClick = { Commands.logout() }, iconPath = "logout.svg")
+                Icon(onClick = { Commands.restart() }, iconPath = "reload.svg")
+                Icon(onClick = { Commands.shutdown() }, iconPath = "power.svg")
+                Icon(onClick = { Commands.close() }, iconPath = "close.svg")
             }
         }
     }
 }
 
 @Composable
-fun Lock() {
+fun Icon(onClick: () -> Unit, iconPath: String) {
     Surface(
         modifier = Modifier
             .clip(CircleShape)
-            .clickable { Commands.lock() }
+            .clickable { onClick() }
     ) {
         Icon(
             modifier = Modifier
-                .padding(all = 50.dp),
-            painter = svgResource("lock.svg"),
-            tint = MaterialTheme.colors.primary,
-            contentDescription = ""
-        )
-    }
-
-}
-
-@Composable
-fun Sleep() {
-    Surface(
-        modifier = Modifier
-            .clip(CircleShape)
-            .clickable { Commands.sleep() }
-    ) {
-        Icon(
-            modifier = Modifier
-                .padding(all = 50.dp),
-            painter = svgResource("pause.svg"),
-            tint = MaterialTheme.colors.primary,
-            contentDescription = ""
-        )
-    }
-}
-
-@Composable
-fun Logout() {
-    Surface(
-        modifier = Modifier
-            .clip(CircleShape)
-            .clickable { Commands.logout() }
-    ) {
-        Icon(
-            modifier = Modifier
-                .padding(all = 50.dp),
-            painter = svgResource("logout.svg"),
-            tint = MaterialTheme.colors.primary,
-            contentDescription = ""
-        )
-    }
-}
-
-@Composable
-fun Restart() {
-    Surface(
-        modifier = Modifier
-            .clip(CircleShape)
-            .clickable { Commands.restart() }
-    ) {
-        Icon(
-            modifier = Modifier
-                .padding(all = 50.dp),
-            painter = svgResource("reload.svg"),
-            tint = MaterialTheme.colors.primary,
-            contentDescription = ""
-        )
-    }
-}
-
-@Composable
-fun Shutdown() {
-    Surface(
-        modifier = Modifier
-            .clip(CircleShape)
-            .clickable { Commands.shutdown() }
-    ) {
-        Icon(
-            modifier = Modifier
-                .padding(all = 50.dp),
-            painter = svgResource("power.svg"),
+                .padding(all = 50.dp)
+                .size(75.dp),
+            painter = svgResource(iconPath),
             tint = MaterialTheme.colors.primary,
             contentDescription = ""
         )

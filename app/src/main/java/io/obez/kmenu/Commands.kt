@@ -43,4 +43,8 @@ object Commands {
         CommandRunner.run("shutdown now")
         exitProcess(0)
     }
+
+    fun close() {
+        exitProcess(0)
+    }
 }

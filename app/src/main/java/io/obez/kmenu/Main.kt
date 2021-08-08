@@ -20,7 +20,7 @@ fun main() = application {
         state = rememberWindowState(
             size = WindowSize(
                 width = 1100.dp,
-                height = 300.dp
+                height = 200.dp
             )
         )
     ) {
