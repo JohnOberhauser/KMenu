@@ -1,8 +1,23 @@
 # KMenu
 
-export /usr/lib/jvm/java-16-openjdk
-./gradlew :kmenu:run
+### Warning
 
-./gradlew :kmenu:createDistributable
+Because jetpack compose targets the jvm, this program might take up around 200 MB of memory when running.  I would not recommend using this if you have extreme memory limitations on your machine.
 
-distributable located /kmenu/build/compose/binaries/main/app/kmenu
+### Run for testing
+
+`./gradlew :kmenu:run`
+
+### Install
+
+`./buildAndInstall.sh`
+
+### Uninstall
+
+`./uninstall.sh`
+
+### Customizing
+
+The files you will likely be interested in are located in `kmenu/src/main/java/io/obez/kmenu`    
+Check out `theme/AppTheme` for colors    
+Check out `system/Commands` for your system commands

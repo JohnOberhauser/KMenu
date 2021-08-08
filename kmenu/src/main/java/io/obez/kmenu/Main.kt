@@ -17,6 +17,7 @@ fun main() = application {
         resizable = false,
         onCloseRequest = ::exitApplication,
         title = "KMenu - power options",
+        alwaysOnTop = true,
         state = rememberWindowState(
             size = WindowSize(
                 width = 1100.dp,

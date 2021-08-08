@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.svgResource
 import androidx.compose.ui.unit.dp
-import io.obez.kmenu.Commands
+import io.obez.kmenu.system.Commands
 
 @Composable
 fun Root() {
