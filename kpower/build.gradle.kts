@@ -11,6 +11,6 @@ dependencies {
 
 compose.desktop {
     application {
-        mainClass = "io.obez.kmenu.MainKt"
+        mainClass = "io.obez.kpower.MainKt"
     }
 }

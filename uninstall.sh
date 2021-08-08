@@ -1,4 +1,4 @@
 #!/bin/bash
 
-sudo rm /usr/bin/kmenu
-sudo rm -rf /opt/kmenu
+sudo rm /usr/bin/kpower
+sudo rm -rf /opt/kpower

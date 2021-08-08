@@ -1,4 +1,4 @@
-package io.obez.kmenu
+package io.obez.kpower
 
 import androidx.compose.material.MaterialTheme
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -7,8 +7,8 @@ import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.WindowSize
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
-import io.obez.kmenu.theme.ColorPalette
-import io.obez.kmenu.ui.Root
+import io.obez.kpower.theme.ColorPalette
+import io.obez.kpower.ui.Root
 
 @ExperimentalComposeUiApi
 fun main() = application {
@@ -16,7 +16,7 @@ fun main() = application {
         undecorated = true,
         resizable = false,
         onCloseRequest = ::exitApplication,
-        title = "KMenu - power options",
+        title = "KPower - power options",
         alwaysOnTop = true,
         state = rememberWindowState(
             size = WindowSize(

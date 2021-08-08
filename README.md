@@ -8,7 +8,7 @@ Because jetpack compose targets the jvm, this program might take up around 200 M
 
 ### Run for testing
 
-`./gradlew :kmenu:run`
+`./gradlew :kpower:run`
 
 ### Install
 
@@ -20,7 +20,7 @@ Because jetpack compose targets the jvm, this program might take up around 200 M
 
 ### Customizing
 
-The files you will likely be interested in are located in `kmenu/src/main/java/io/obez/kmenu`    
+The files you will likely be interested in are located in `kpower/src/main/java/io/obez/kpower`    
 Check out `theme/AppTheme` for colors    
 Check out `system/Commands` for your system commands
 
@@ -29,5 +29,5 @@ Check out `system/Commands` for your system commands
 If you are using sway, add this to your sway configs for the best experience
 
 
-    for_window [title="KMenu - power options"] floating enable
-    for_window [title="KMenu - power options"] floating_modifier none
+    for_window [title="KPower - power options"] floating enable
+    for_window [title="KPower - power options"] floating_modifier none

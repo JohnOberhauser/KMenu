@@ -1,4 +1,4 @@
-package io.obez.kmenu.ui
+package io.obez.kpower.ui
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.svgResource
 import androidx.compose.ui.unit.dp
-import io.obez.kmenu.system.Commands
+import io.obez.kpower.system.Commands
 
 @Composable
 fun Root() {

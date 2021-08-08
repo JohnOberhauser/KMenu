@@ -1,4 +1,4 @@
-package io.obez.kmenu.theme
+package io.obez.kpower.theme
 
 import androidx.compose.material.darkColors
 import androidx.compose.ui.graphics.Color

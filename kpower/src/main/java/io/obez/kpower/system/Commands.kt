@@ -1,4 +1,4 @@
-package io.obez.kmenu.system
+package io.obez.kpower.system
 
 import kotlin.system.exitProcess
 

@@ -1,11 +1,11 @@
 #!/bin/bash
 
-./gradlew :kmenu:createDistributable
+./gradlew :kpower:createDistributable
 
 ./uninstall.sh
 
-sudo cp -r kmenu/build/compose/binaries/main/app/kmenu /opt/
+sudo cp -r kpower/build/compose/binaries/main/app/kpower /opt/
 
-sudo ln -s /opt/kmenu/bin/kmenu /usr/bin/
+sudo ln -s /opt/kpower/bin/kpower /usr/bin/
 
 echo Success
