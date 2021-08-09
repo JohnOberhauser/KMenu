@@ -22,12 +22,12 @@ class ViewModel {
 
     private val _desktopApps = MutableStateFlow(listOf<DesktopFileInfo>())
     val desktopApps: StateFlow<List<DesktopFileInfo>> = _desktopApps
-    private val allDesktopApps: List<DesktopFileInfo>
-    val selectedDesktopApp: MutableStateFlow<DesktopFileInfo?>
+    private var allDesktopApps: List<DesktopFileInfo> = listOf()
+    val selectedDesktopApp: MutableStateFlow<DesktopFileInfo?> = MutableStateFlow(null)
 
     private val _pathBinaries = MutableStateFlow(listOf<String>())
     val pathBinaries: StateFlow<List<String>> = _pathBinaries
-    private val allPathBinaries: List<String>
+    private var allPathBinaries: List<String> = listOf()
     val selectedBinary: MutableStateFlow<String?> = MutableStateFlow(null)
 
     val selectedGroup = MutableStateFlow(SelectedGroup.Apps)
@@ -37,31 +37,29 @@ class ViewModel {
     init {
         allDesktopApps = findDesktopApps()
         _desktopApps.value = allDesktopApps
-        selectedDesktopApp = MutableStateFlow(allDesktopApps.firstOrNull())
+        selectedDesktopApp.value = allDesktopApps.firstOrNull()
 
         allPathBinaries = findPathBinaries()
         _pathBinaries.value = allPathBinaries
 
         viewModelScope.launch {
-            launch {
-                searchText.collect {
-                    search()
-                }
+            searchText.collect {
+                search()
             }
+        }
 
-            launch {
-                selectedGroup.collect {
-                    if (it == SelectedGroup.Apps) {
-                        if (selectedDesktopApp.value == null) {
-                            selectedDesktopApp.value = desktopApps.value.firstOrNull()
-                        }
-                        selectedBinary.value = null
-                    } else {
-                        if (selectedBinary.value == null) {
-                            selectedBinary.value = pathBinaries.value.firstOrNull()
-                        }
-                        selectedDesktopApp.value = null
+        viewModelScope.launch {
+            selectedGroup.collect {
+                if (it == SelectedGroup.Apps) {
+                    if (selectedDesktopApp.value == null) {
+                        selectedDesktopApp.value = desktopApps.value.firstOrNull()
                     }
+                    selectedBinary.value = null
+                } else {
+                    if (selectedBinary.value == null) {
+                        selectedBinary.value = pathBinaries.value.firstOrNull()
+                    }
+                    selectedDesktopApp.value = null
                 }
             }
         }
@@ -74,7 +72,8 @@ class ViewModel {
                 "/usr/share/applications",
                 "/var/lib/flatpak/app"
             ),
-            searchString = ".desktop"
+            searchString = ".desktop",
+            flatpakSearch = true
         ).filter {
             if (it.path.contains("/var/lib/flatpak/app")) {
                 it.path.contains("current/active/files/share")
