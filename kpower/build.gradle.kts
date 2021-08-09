@@ -7,6 +7,7 @@ plugins {
 
 dependencies {
     implementation(compose.desktop.currentOs)
+    implementation(project(":common"))
 }
 
 compose.desktop {

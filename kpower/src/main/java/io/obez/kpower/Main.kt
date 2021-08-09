@@ -7,7 +7,7 @@ import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.WindowSize
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
-import io.obez.kpower.theme.ColorPalette
+import io.obez.common.theme.ColorPalette
 import io.obez.kpower.ui.Root
 
 @ExperimentalComposeUiApi

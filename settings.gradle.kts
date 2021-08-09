@@ -1,3 +1,5 @@
 include(
-    ":kpower"
+    ":kpower",
+    ":kmenu",
+    ":common"
 )
