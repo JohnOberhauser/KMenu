@@ -1,1 +1,0 @@
-/ssd/home/workspace/KMenu/buildSrc/build/classes/kotlin/main/Deps$JetBrains$Compose.class:/ssd/home/workspace/KMenu/buildSrc/build/classes/kotlin/main/Deps$JetBrains$Kotlin.class:/ssd/home/workspace/KMenu/buildSrc/build/classes/kotlin/main/Deps$JetBrains.class:/ssd/home/workspace/KMenu/buildSrc/build/classes/kotlin/main/Deps.class
