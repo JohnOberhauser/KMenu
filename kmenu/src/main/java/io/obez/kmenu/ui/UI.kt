@@ -14,6 +14,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.svgResource
 import androidx.compose.ui.unit.dp
+import io.obez.common.system.CommandRunner
+import io.obez.common.system.Commands
 import io.obez.kmenu.viewModel.ViewModel
 
 val viewModel = ViewModel()
@@ -44,7 +46,13 @@ fun Root() {
                         )
                     },
                     colors = TextFieldDefaults.textFieldColors(
-                        backgroundColor = MaterialTheme.colors.background
+                        backgroundColor = MaterialTheme.colors.background,
+                        textColor = MaterialTheme.colors.primary,
+                        focusedLabelColor = MaterialTheme.colors.primary,
+                        unfocusedLabelColor = MaterialTheme.colors.primary,
+                        cursorColor = MaterialTheme.colors.primary,
+                        focusedIndicatorColor = MaterialTheme.colors.secondary,
+                        unfocusedIndicatorColor = MaterialTheme.colors.secondary
                     )
                 )
                 SearchResults()
@@ -80,7 +88,8 @@ fun SearchResults() {
                     desktopApps
                 ) { item ->
                     Text(
-                        text = item
+                        text = item.programName,
+                        color = MaterialTheme.colors.primary
                     )
                 }
             }
@@ -105,7 +114,8 @@ fun SearchResults() {
                     systemPrograms
                 ) { item ->
                     Text(
-                        text = item
+                        text = item,
+                        color = MaterialTheme.colors.primary
                     )
                 }
             }
@@ -120,25 +130,25 @@ fun MainApps() {
             .fillMaxSize()
             .wrapContentSize(Alignment.BottomCenter)
     ) {
-        Icon(onClick = {  }, iconPath = "nautilus.svg")
-        Icon(onClick = {  }, iconPath = "firefox.svg")
-        Icon(onClick = {  }, iconPath = "terminal.svg")
-        Icon(onClick = {  }, iconPath = "atom.svg")
-        Icon(onClick = {  }, iconPath = "androidstudio.svg")
-        Icon(onClick = {  }, iconPath = "gimp.svg")
-        Icon(onClick = {  }, iconPath = "spotify.svg")
-        Icon(onClick = {  }, iconPath = "steam.svg")
-        Icon(onClick = {  }, iconPath = "slack.svg")
-        Icon(onClick = {  }, iconPath = "arch.svg")
+        Icon(appName = "Files", iconPath = "nautilus.svg")
+        Icon(appName = "Firefox", iconPath = "firefox.svg")
+        Icon(appName = "Terminator", iconPath = "terminal.svg")
+        Icon(appName = "Atom", iconPath = "atom.svg")
+        Icon(appName = "Android Studio", iconPath = "androidstudio.svg")
+        Icon(appName = "GNU Image Manipulation Program", iconPath = "gimp.svg")
+        Icon(appName = "Spotify", iconPath = "spotify.svg")
+        Icon(appName = "Steam", iconPath = "steam.svg")
+        Icon(appName = "Slack", iconPath = "slack.svg")
+        Icon(appName = "Add/Remove Software", iconPath = "arch.svg")
     }
 }
 
 @Composable
-fun Icon(onClick: () -> Unit, iconPath: String) {
+fun Icon(appName: String, iconPath: String) {
     Surface(
         modifier = Modifier
             .clip(CircleShape)
-            .clickable { onClick() }
+            .clickable { viewModel.getDesktopFileName(appName)?.let { Commands.gtkLaunch(it) } }
     ) {
         Icon(
             modifier = Modifier

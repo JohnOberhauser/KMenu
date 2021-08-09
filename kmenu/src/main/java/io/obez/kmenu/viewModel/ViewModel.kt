@@ -1,5 +1,7 @@
 package io.obez.kmenu.viewModel
 
+import io.obez.common.system.DesktopFileInfo
+import io.obez.common.system.FileReader
 import io.obez.common.system.Search
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -10,13 +12,13 @@ import kotlinx.coroutines.launch
 
 class ViewModel {
 
-    val viewModelScope = CoroutineScope(Dispatchers.Default)
-
-    private val _desktopApps = MutableStateFlow(listOf<String>())
-    val desktopApps: StateFlow<List<String>> = _desktopApps
-    private val allDesktopApps: List<String>
+    private val viewModelScope = CoroutineScope(Dispatchers.Default)
 
     val searchText = MutableStateFlow("")
+
+    private val _desktopApps = MutableStateFlow(listOf<DesktopFileInfo>())
+    val desktopApps: StateFlow<List<DesktopFileInfo>> = _desktopApps
+    private val allDesktopApps: List<DesktopFileInfo>
 
     private val _pathBinaries = MutableStateFlow(listOf<String>())
     val pathBinaries: StateFlow<List<String>> = _pathBinaries
@@ -36,17 +38,29 @@ class ViewModel {
         }
     }
 
-    private fun findDesktopApps(): List<String> {
-        val files = Search.searchDirectories(
+    private fun findDesktopApps(): List<DesktopFileInfo> =
+        Search.searchDirectories(
             directoryPaths = listOf(
                 "${System.getenv("HOME")}/.local/share/applications",
                 "/usr/share/applications",
                 "/var/lib/flatpak/app"
             ),
             searchString = ".desktop"
-        )
-        return files.map { it.name.substringBefore(".desktop") }.sorted()
-    }
+        ).filter {
+            if (it.path.contains("/var/lib/flatpak/app")) {
+                it.path.contains("current/active/files/share")
+            } else {
+                true
+            }
+        }.mapNotNull {
+            FileReader.getNameFromDesktopFile(it.path)?.let { appName ->
+                DesktopFileInfo(
+                    it.path,
+                    it.name,
+                    appName
+                )
+            }
+        }.sortedBy { it.programName }
 
     private fun findPathBinaries(): List<String> {
         val files = Search.searchDirectories(
@@ -57,7 +71,10 @@ class ViewModel {
     }
 
     private fun search() {
-        _desktopApps.value = allDesktopApps.filter { it.contains(searchText.value) }
-        _pathBinaries.value = allPathBinaries.filter { it.contains(searchText.value) }
+        _desktopApps.value = allDesktopApps.filter { it.programName.contains(searchText.value, ignoreCase = true) }
+        _pathBinaries.value = allPathBinaries.filter { it.contains(searchText.value, ignoreCase = true) }
     }
+
+    fun getDesktopFileName(appName: String): String? =
+        allDesktopApps.find { it.programName.equals(appName, ignoreCase = true) }?.name
 }

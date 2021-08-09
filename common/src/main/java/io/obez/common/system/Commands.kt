@@ -49,4 +49,9 @@ object Commands {
     fun close() {
         exitProcess(0)
     }
+
+    fun gtkLaunch(app: String) {
+        CommandRunner.run("gtk-launch $app")
+        exitProcess(0)
+    }
 }
