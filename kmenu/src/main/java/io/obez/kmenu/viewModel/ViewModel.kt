@@ -3,12 +3,16 @@ package io.obez.kmenu.viewModel
 import io.obez.common.system.DesktopFileInfo
 import io.obez.common.system.FileReader
 import io.obez.common.system.Search
+import io.obez.kmenu.model.SelectedGroup
+import io.obez.kmenu.utils.appIgnoreList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+
+val viewModel = ViewModel()
 
 class ViewModel {
 
@@ -19,21 +23,46 @@ class ViewModel {
     private val _desktopApps = MutableStateFlow(listOf<DesktopFileInfo>())
     val desktopApps: StateFlow<List<DesktopFileInfo>> = _desktopApps
     private val allDesktopApps: List<DesktopFileInfo>
+    val selectedDesktopApp: MutableStateFlow<DesktopFileInfo?>
 
     private val _pathBinaries = MutableStateFlow(listOf<String>())
     val pathBinaries: StateFlow<List<String>> = _pathBinaries
     private val allPathBinaries: List<String>
+    val selectedBinary: MutableStateFlow<String?> = MutableStateFlow(null)
+
+    val selectedGroup = MutableStateFlow(SelectedGroup.Apps)
+
+    var needsScroll = false
 
     init {
         allDesktopApps = findDesktopApps()
         _desktopApps.value = allDesktopApps
+        selectedDesktopApp = MutableStateFlow(allDesktopApps.firstOrNull())
 
         allPathBinaries = findPathBinaries()
         _pathBinaries.value = allPathBinaries
 
         viewModelScope.launch {
-            searchText.collect {
-                search()
+            launch {
+                searchText.collect {
+                    search()
+                }
+            }
+
+            launch {
+                selectedGroup.collect {
+                    if (it == SelectedGroup.Apps) {
+                        if (selectedDesktopApp.value == null) {
+                            selectedDesktopApp.value = desktopApps.value.firstOrNull()
+                        }
+                        selectedBinary.value = null
+                    } else {
+                        if (selectedBinary.value == null) {
+                            selectedBinary.value = pathBinaries.value.firstOrNull()
+                        }
+                        selectedDesktopApp.value = null
+                    }
+                }
             }
         }
     }
@@ -60,21 +89,61 @@ class ViewModel {
                     appName
                 )
             }
+        }.filter {
+            !appIgnoreList.contains(it.programName)
         }.sortedBy { it.programName }
 
-    private fun findPathBinaries(): List<String> {
-        val files = Search.searchDirectories(
+    private fun findPathBinaries(): List<String> =
+        Search.searchDirectories(
             directoryPaths = System.getenv("PATH").split(":"),
             searchString = ""
-        )
-        return files.map { it.name }.sorted()
-    }
+        ).map { it.name }.distinct().sorted()
 
     private fun search() {
         _desktopApps.value = allDesktopApps.filter { it.programName.contains(searchText.value, ignoreCase = true) }
         _pathBinaries.value = allPathBinaries.filter { it.contains(searchText.value, ignoreCase = true) }
+        if (selectedGroup.value == SelectedGroup.Apps) {
+            selectedDesktopApp.value = desktopApps.value.firstOrNull()
+            if (selectedDesktopApp.value == null && pathBinaries.value.isNotEmpty()) {
+                toggleSelectedGroup()
+            }
+        } else if (selectedGroup.value == SelectedGroup.Binaries) {
+            selectedBinary.value = pathBinaries.value.firstOrNull()
+            if (selectedBinary.value == null && desktopApps.value.isNotEmpty()) {
+                toggleSelectedGroup()
+            }
+        }
     }
 
-    fun getDesktopFileName(appName: String): String? =
-        allDesktopApps.find { it.programName.equals(appName, ignoreCase = true) }?.name
+    fun getDesktopFileByName(appName: String): DesktopFileInfo? =
+        allDesktopApps.find { it.programName.equals(appName, ignoreCase = true) }
+
+    fun toggleSelectedGroup() {
+        selectedGroup.value = if (selectedGroup.value == SelectedGroup.Apps) {
+            SelectedGroup.Binaries
+        } else {
+            SelectedGroup.Apps
+        }
+    }
+
+    fun onKeyDown() {
+        moveSelectedIndex(1)
+    }
+
+    fun onKeyUp() {
+        moveSelectedIndex(-1)
+    }
+
+    private fun moveSelectedIndex(by: Int) {
+        if (selectedGroup.value == SelectedGroup.Apps) {
+            desktopApps.value.getOrNull(desktopApps.value.indexOf(selectedDesktopApp.value) + by)?.let {
+                selectedDesktopApp.value = it
+            }
+        } else {
+            pathBinaries.value.getOrNull(pathBinaries.value.indexOf(selectedBinary.value) + by)?.let {
+                selectedBinary.value = it
+            }
+        }
+        needsScroll = true
+    }
 }

@@ -50,8 +50,12 @@ object Commands {
         exitProcess(0)
     }
 
-    fun gtkLaunch(app: String) {
-        CommandRunner.run("gtk-launch $app")
+    fun gtkLaunch(app: DesktopFileInfo) {
+        if (app.programName == "Android Studio" || app.programName == "IntelliJ IDEA Community") {
+            CommandRunner.run("export _JAVA_AWT_WM_NONREPARENTING=1 && gtk-launch ${app.name}")
+        } else {
+            CommandRunner.run("gtk-launch ${app.name}")
+        }
         exitProcess(0)
     }
 }

@@ -13,6 +13,8 @@ import io.obez.common.system.Commands
 import io.obez.common.theme.ColorPalette
 import io.obez.kmenu.ui.Root
 import io.obez.kmenu.ui.searchFocusRequester
+import io.obez.kmenu.ui.typography
+import io.obez.kmenu.utils.handle
 
 @ExperimentalComposeUiApi
 fun main() = application {
@@ -20,7 +22,7 @@ fun main() = application {
         undecorated = true,
         resizable = false,
         onCloseRequest = ::exitApplication,
-        title = "KPower - power options",
+        title = "KMenu - app launcher",
         alwaysOnTop = true,
         state = rememberWindowState(
             size = WindowSize(
@@ -29,16 +31,14 @@ fun main() = application {
             )
         ),
         onKeyEvent = {
-            if (it.key == Key.Escape) {
-                Commands.close()
-                return@Window true
-            }
+            it.handle()
             searchFocusRequester.requestFocus()
             return@Window true
         }
     ) {
         MaterialTheme(
             colors = ColorPalette,
+            typography = typography
         ) {
             Root()
         }
