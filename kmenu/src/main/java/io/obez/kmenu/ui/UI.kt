@@ -222,25 +222,31 @@ fun MainApps() {
             .fillMaxSize()
             .wrapContentSize(Alignment.BottomCenter)
     ) {
-        Icon(appName = "Files", iconPath = "nautilus.svg")
-        Icon(appName = "Firefox", iconPath = "firefox.svg")
-        Icon(appName = "Terminator", iconPath = "terminal.svg")
-        Icon(appName = "Atom", iconPath = "atom.svg")
-        Icon(appName = "Android Studio", iconPath = "androidstudio.svg")
-        Icon(appName = "GNU Image Manipulation Program", iconPath = "gimp.svg")
-        Icon(appName = "Spotify", iconPath = "spotify.svg")
-        Icon(appName = "Steam", iconPath = "steam.svg")
-        Icon(appName = "Slack", iconPath = "slack.svg")
-        Icon(appName = "Add/Remove Software", iconPath = "arch.svg")
+        Icon(onClick = { viewModel.getDesktopFileByName("Files")?.let { Commands.gtkLaunch(it) } }, iconPath = "nautilus.svg")
+        Icon(onClick = { viewModel.getDesktopFileByName("Firefox")?.let { Commands.gtkLaunch(it) } }, iconPath = "firefox.svg")
+        Icon(onClick = { viewModel.getDesktopFileByName("Terminator")?.let { Commands.gtkLaunch(it) } }, iconPath = "terminal.svg")
+        Icon(onClick = { viewModel.getDesktopFileByName("Atom")?.let { Commands.gtkLaunch(it) } }, iconPath = "atom.svg")
+        Icon(onClick = { viewModel.getDesktopFileByName("Android Studio")?.let { Commands.gtkLaunch(it) } }, iconPath = "androidstudio.svg")
+        Icon(onClick = { viewModel.getDesktopFileByName("GNU Image Manipulation Program")?.let { Commands.gtkLaunch(it) } }, iconPath = "gimp.svg")
+        Icon(
+            onClick = {
+                CommandRunner.run("terminator -e spt")
+                Commands.close()
+            },
+            iconPath = "spotify.svg"
+        )
+        Icon(onClick = { viewModel.getDesktopFileByName("Steam")?.let { Commands.gtkLaunch(it) } }, iconPath = "steam.svg")
+        Icon(onClick = { viewModel.getDesktopFileByName("Slack")?.let { Commands.gtkLaunch(it) } }, iconPath = "slack.svg")
+        Icon(onClick = { viewModel.getDesktopFileByName("Add/Remove Software")?.let { Commands.gtkLaunch(it) } }, iconPath = "arch.svg")
     }
 }
 
 @Composable
-fun Icon(appName: String, iconPath: String) {
+fun Icon(onClick: () -> Unit, iconPath: String) {
     Surface(
         modifier = Modifier
             .clip(CircleShape)
-            .clickable { viewModel.getDesktopFileByName(appName)?.let { Commands.gtkLaunch(it) } }
+            .clickable { onClick() }
     ) {
         Icon(
             modifier = Modifier
