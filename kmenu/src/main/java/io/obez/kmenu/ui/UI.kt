@@ -132,7 +132,7 @@ fun SearchResults() {
                         }
                         viewModel.selectedDesktopApp.value = item
                     },
-                    isActive = { item == selectedDesktopApp }
+                    isActive = item == selectedDesktopApp
                 )
             }
         }
@@ -152,7 +152,7 @@ fun SearchResults() {
                         }
                         viewModel.selectedBinary.value = item
                     },
-                    isActive = { item == selectedBinary }
+                    isActive = item == selectedBinary
                 )
             }
         }
@@ -198,7 +198,7 @@ fun SelectableColumn(
 }
 
 @Composable
-fun ListItem(text: String, onClick: () -> Unit, onHover: () -> Unit, isActive: () -> Boolean) {
+fun ListItem(text: String, onClick: () -> Unit, onHover: () -> Unit, isActive: Boolean) {
     Text(
         modifier = Modifier
             .fillMaxWidth()
@@ -208,7 +208,7 @@ fun ListItem(text: String, onClick: () -> Unit, onHover: () -> Unit, isActive: (
                     false
                 }
             )
-            .background(color = if (isActive()) MaterialTheme.colors.secondary else MaterialTheme.colors.background)
+            .background(color = if (isActive) MaterialTheme.colors.secondary else MaterialTheme.colors.background)
             .clickable { onClick() },
         text = text,
         color = MaterialTheme.colors.primary
